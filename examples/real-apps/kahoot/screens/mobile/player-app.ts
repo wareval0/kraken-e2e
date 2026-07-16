@@ -116,18 +116,30 @@ export class PlayerApp {
    * never mistaken for the end.
    */
   async finish(): Promise<void> {
-    const deadline = Date.now() + 120_000;
+    // The first wrap-up screen (placement) lags well behind this step starting:
+    // the player is still on the "answer submitted" screen until the host
+    // reveals the results. Wait for that first Continue before doing anything —
+    // otherwise "no Continue on screen" reads as "game already over" and we'd
+    // finish without tapping a thing.
+    await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 90_000 });
+
+    const deadline = Date.now() + 150_000;
+    let tappedSomething = false;
     while (Date.now() < deadline) {
       if (await this.session.isDisplayed(CONTINUE)) {
         // Tap the current Continue. If it vanished between the check and the
         // tap, ignore the miss and re-evaluate on the next pass.
         await this.session.tap(CONTINUE).catch(() => {});
+        tappedSomething = true;
         await this.#pollUntilGone(CONTINUE, 3_000); // let the tap land / screen move
-      } else if (await this.#staysGone(CONTINUE, 6_000)) {
-        return; // Continue absent for a sustained window → the game is over
+      } else if (tappedSomething && (await this.#staysGone(CONTINUE, 10_000))) {
+        // Only conclude the wrap-up is over once we've actually tapped through
+        // it AND no Continue has reappeared for a window comfortably longer than
+        // the gap between two of these WebView screens.
+        return;
       }
     }
-    throw new Error('The end-of-game "Continue" screens did not resolve within 120s.');
+    throw new Error('The end-of-game "Continue" screens did not resolve within 150s.');
   }
 
   /** Poll until `target` is gone (true) or the budget elapses (false). */
