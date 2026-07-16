@@ -1,0 +1,53 @@
+{
+  "name": "@kraken-e2e/core",
+  "version": "3.0.0",
+  "description": "Orchestrator: session manager, DAG step scheduler, plugin registry, host detection, event bus; exports the driver Conformance Test Kit at @kraken-e2e/core/ctk",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./ctk": {
+      "types": "./dist/ctk.d.ts",
+      "default": "./dist/ctk.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "default": "./dist/testing/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/signaling": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependencies": {
+    "vitest": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    }
+  },
+  "license": "GPL-3.0-only"
+}
