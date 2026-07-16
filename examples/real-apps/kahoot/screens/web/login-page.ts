@@ -46,16 +46,20 @@ export class LoginPage {
     await this.session.waitFor(DASHBOARD, 'visible', { timeoutMs: 60_000 });
   }
 
-  /** Accept the OneTrust banner when shown; wait out its blocking overlay. */
+  /** Accept the OneTrust banner when shown; wait out its blocking overlay.
+   *  This runs before every guarded tap, so the "is it there?" probe is kept
+   *  SHORT: the sheet, when it comes, renders within a second or two — a long
+   *  wait here would just tax every call (and every retry) when no sheet is
+   *  present. A sheet that slips in later still gets caught by the tap retry. */
   private async acceptCookiesIfAsked(): Promise<void> {
     try {
-      await this.session.waitFor(COOKIES_ACCEPT, 'visible', { timeoutMs: 8_000 });
+      await this.session.waitFor(COOKIES_ACCEPT, 'visible', { timeoutMs: 3_000 });
       await this.session.tap(COOKIES_ACCEPT);
     } catch {
       return; // already accepted (or this page hasn't asked yet)
     }
     try {
-      await this.session.waitFor(COOKIES_OVERLAY, 'hidden', { timeoutMs: 8_000 });
+      await this.session.waitFor(COOKIES_OVERLAY, 'hidden', { timeoutMs: 3_000 });
     } catch {
       // overlay lingered — the resilient taps absorb it
     }
