@@ -1,0 +1,53 @@
+{
+  "name": "@kraken-e2e/signaling",
+  "version": "3.0.0",
+  "description": "Standalone multi-actor signal log (scoped append-only log with per-subscriber cursors), transports, and the transport-conformance suite",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./conformance": {
+      "types": "./dist/conformance.d.ts",
+      "default": "./dist/conformance.js"
+    },
+    "./package.json": "./package.json",
+    "./redis": {
+      "types": "./dist/redis-transport.d.ts",
+      "default": "./dist/redis-transport.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "vitest": "^4.0.0",
+    "redis": "^6.1.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    },
+    "redis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "redis": "catalog:"
+  },
+  "license": "GPL-3.0-only"
+}
