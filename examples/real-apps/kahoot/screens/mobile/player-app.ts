@@ -102,22 +102,38 @@ export class PlayerApp {
    * walks through TWO wrap-up screens — the player's placement, then a stats
    * summary — each with a "Continue" button that shares the SAME id.
    *
-   * That shared id is the trap. Tapping "the Continue" twice in a row races the
-   * screen transition: if the first screen's button is still up when the second
-   * tap fires, the second tap re-hits the FIRST button and the next screen is
-   * never dismissed. So we walk the KNOWN number of screens, and for each one
-   * wait for its button to appear, tap it, then wait for THAT button to
-   * actually leave before moving on. These are WebView screens with variable
-   * render timing, so both waits are generous; a screen that never arrives, or
-   * a tap that never advances, surfaces as a clean timeout rather than a silent
-   * miss.
+   * These are WebView screens, and that is the catch: the native Continue button
+   * can accept a click (Appium reports success) yet do nothing, because the
+   * WebView behind it isn't ready to handle the press yet. A single tap per
+   * screen therefore isn't reliable. For each of the two known screens we wait
+   * for its Continue, then re-tap — re-resolving the element each time — until
+   * that button actually leaves. A press that never lands surfaces as a clean
+   * failure rather than a silently un-finished game.
    */
   async finish(): Promise<void> {
     const WRAP_UP_SCREENS = 2; // placement, then stats
     for (let screen = 0; screen < WRAP_UP_SCREENS; screen += 1) {
       await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 60_000 });
-      await this.session.tap(CONTINUE);
-      await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 20_000 });
+      await this.tapContinueUntilItLeaves();
     }
+  }
+
+  /** Tap the on-screen Continue until it goes away — a WebView-backed native
+   *  button can swallow a click until it's ready, so one tap isn't enough. The
+   *  per-attempt wait is comfortably longer than a real screen transition, so a
+   *  tap that DID work is never re-fired (which could over-shoot to the next
+   *  screen); only a click that truly didn't land is retried. */
+  private async tapContinueUntilItLeaves(): Promise<void> {
+    for (let attempt = 1; attempt <= 5; attempt += 1) {
+      if (!(await this.session.isDisplayed(CONTINUE))) return; // already advanced
+      await this.session.tap(CONTINUE);
+      try {
+        await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 8_000 });
+        return; // the screen advanced
+      } catch {
+        // The button is still here — the click didn't take. Re-resolve and retry.
+      }
+    }
+    throw new Error('The "Continue" button did not respond after 5 taps.');
   }
 }
