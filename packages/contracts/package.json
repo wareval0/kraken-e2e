@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/contracts",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Zero-runtime-dependency SPI: driver/reporter interfaces, event types, error codes, defineDriver/defineReporter, CONTRACT_VERSION",
   "type": "module",
   "exports": {

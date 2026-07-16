@@ -1,6 +1,6 @@
 {
   "name": "kraken-example-fake-messaging",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Phase 1 exit-criterion example: a three-actor messaging choreography running entirely on FakeDriver — zero real devices",
   "private": true,
   "type": "module",

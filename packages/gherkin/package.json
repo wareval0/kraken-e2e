@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/gherkin",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "BDD front-end: .feature parsing (official Gherkin stack), typed step registry, scenario compiler, built-in choreography steps",
   "type": "module",
   "exports": {

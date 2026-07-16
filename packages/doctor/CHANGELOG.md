@@ -1,5 +1,15 @@
 # @kraken-e2e/doctor
 
+## 3.1.0
+
+### Patch Changes
+
+- Updated dependencies [9c95718]
+- Updated dependencies [9c95718]
+- Updated dependencies [9c95718]
+  - @kraken-e2e/config@3.1.0
+  - @kraken-e2e/contracts@3.1.0
+
 ## 3.0.0
 
 ### Patch Changes

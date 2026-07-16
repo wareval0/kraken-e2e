@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/doctor",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Pure check-execution engine for kraken doctor. Inputs (HostInfo, driver gate statuses, driver-contributed checks) are injected by the CLI — this package never reads process.platform and never knows Appium (ADR-0001 §5.13)",
   "type": "module",
   "exports": {

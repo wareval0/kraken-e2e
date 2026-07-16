@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/fuzz",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Cross-platform random-event engine driving the core session contract (signal-aware fuzzing)",
   "type": "module",
   "exports": {

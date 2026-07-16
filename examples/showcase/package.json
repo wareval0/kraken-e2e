@@ -1,6 +1,6 @@
 {
   "name": "kraken-example-showcase",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The Kraken showcase: realistic multi-user/multi-device E2E suites across Android, iOS and Web — Page Objects, seeded data, signal choreography and seeded monkey testing",
   "private": true,
   "type": "module",

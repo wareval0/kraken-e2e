@@ -1,5 +1,12 @@
 # @kraken-e2e/fuzz
 
+## 3.1.0
+
+### Patch Changes
+
+- Updated dependencies [9c95718]
+  - @kraken-e2e/contracts@3.1.0
+
 ## 3.0.0
 
 ### Minor Changes

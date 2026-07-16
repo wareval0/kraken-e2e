@@ -1,6 +1,6 @@
 {
   "name": "kraken-example-multi-user-android-ios-web",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "THE FLAGSHIP: one scenario choreographing a REAL Android emulator, a REAL iOS simulator and a REAL browser through the signal bus",
   "private": true,
   "type": "module",

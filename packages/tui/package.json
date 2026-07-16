@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/tui",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Ink live terminal UI — the ONLY package that imports ink (ADR-0001 D9/§5.11)",
   "type": "module",
   "exports": {

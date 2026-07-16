@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/driver-android",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Android driver: Appium 3 + appium-uiautomator2-driver",
   "type": "module",
   "exports": {

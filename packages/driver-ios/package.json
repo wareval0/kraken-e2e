@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/driver-ios",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "iOS driver: Appium 3 + appium-xcuitest-driver (hostRequirements: darwin — macOS only, Apple platform restriction)",
   "type": "module",
   "exports": {

@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/reporters",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Reporter projections of the KrakenEvent stream: JSONL, plain-line, Allure 3, CTRF",
   "type": "module",
   "exports": {

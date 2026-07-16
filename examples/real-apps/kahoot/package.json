@@ -1,6 +1,6 @@
 {
   "name": "kraken-example-kahoot",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Kraken vs. a real production app: a cross-device live Kahoot quiz — browser host + native Android player.",
   "private": true,
   "type": "module",

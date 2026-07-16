@@ -1,6 +1,6 @@
 {
   "name": "@kraken-e2e/core",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Orchestrator: session manager, DAG step scheduler, plugin registry, host detection, event bus; exports the driver Conformance Test Kit at @kraken-e2e/core/ctk",
   "type": "module",
   "exports": {
