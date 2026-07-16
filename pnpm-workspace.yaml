@@ -1,0 +1,51 @@
+# Workspace layout per ADR-0001 §5.3. examples/ and apps/ arrive in later phases.
+packages:
+  - packages/*
+  - examples/*
+  # real-apps is a plain folder of one-package-per-app suites (kahoot, …) so
+  # each real-world test keeps its own config, secrets and docs.
+  - examples/real-apps/*
+  - apps/*
+
+# pnpm 11 blocks dependency build scripts by default; these are the vetted
+# ones the mobile stack needs (appium's setup + driver-bundled browser
+# drivers). NOTE: pnpm 11 honors `allowBuilds` (map) — NOT the pnpm<=10
+# `onlyBuiltDependencies` list (a fresh-clone install died on exactly that).
+allowBuilds:
+  appium: true
+  esbuild: true
+  appium-ios-tuntap: true
+  edgedriver: true
+  geckodriver: true
+
+# Shared dependency versions pinned in ONE place (rotation-survival: one line to
+# bump per dependency at the quarterly ritual — see CONTRIBUTING.md).
+catalog:
+  ws: ^8.18.0
+  '@types/ws': ^8.18.0
+  vitepress: ~1.6.4
+  typedoc: ~0.28.19
+  'typedoc-plugin-markdown': ~4.12.0
+  'typedoc-vitepress-theme': ~1.1.3
+  '@faker-js/faker': 10.5.0
+  'allure-js-commons': ~3.10.2
+  redis: ~6.1.0
+  ajv: ^8.20.0
+  'ajv-formats': ^3.0.1
+  webdriverio: 9.29.1
+  '@cucumber/cucumber-expressions': ^20.0.0
+  '@cucumber/gherkin': ^41.0.0
+  '@cucumber/messages': ^33.0.4
+  '@cucumber/tag-expressions': ^10.0.0
+  '@oclif/core': ^4.11.0
+  ink: ~7.1.0
+  'ink-testing-library': ^4.0.0
+  react: ^19.2.0
+  '@types/react': ^19.0.0
+  jiti: ^2.7.0
+  tinyglobby: ^0.2.0
+  '@types/node': ^22.15.0
+  '@vitest/coverage-v8': ^4.1.9
+  typescript: ~6.0.3
+  vitest: ^4.1.9
+  zod: ^4.0.0

@@ -1,0 +1,39 @@
+{
+  "name": "kraken",
+  "version": "0.0.0",
+  "description": "Kraken 3.0 \u2014 multi-user, multi-device E2E testing: concurrent, signal-synchronized choreography across Android, iOS and Web in one BDD scenario",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "check": "turbo run build typecheck test lint",
+    "changeset": "changeset"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.2",
+    "@changesets/cli": "^2.31.0",
+    "@vitest/coverage-v8": "catalog:",
+    "turbo": "^2.10.2",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "author": "Software Design Lab, Universidad de los Andes",
+  "keywords": [
+    "e2e-testing",
+    "multi-device",
+    "inter-communication-testing",
+    "bdd",
+    "gherkin",
+    "appium",
+    "webdriverio"
+  ],
+  "license": "GPL-3.0-only"
+}

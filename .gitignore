@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+*.tsbuildinfo
+
+# Test artifacts
+coverage/
+allure-results/
+allure-report/
+ctrf/
+*.jsonl.log
+
+# Tooling caches
+.turbo/
+
+# Environment / secrets (never commit credentials — ADR-0001 D13)
+.env
+.env.*
+!.env.example
+
+# Claude Code session state (project settings in .claude/ may be committed later)
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.kraken/
+
+# Test fixtures simulate installed driver packages — keep them tracked
+!packages/core/tests/fixtures/**/node_modules/
+!packages/core/tests/fixtures/**/node_modules/**
+fixtures/apps/
+codelab/kraken-getting-started/
+
+# Generated codelab output (built from codelab/*.md via claat)
+kraken-getting-started/
