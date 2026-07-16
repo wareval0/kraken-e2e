@@ -1,0 +1,44 @@
+{
+  "name": "@kraken-e2e/driver-web",
+  "version": "3.0.0",
+  "description": "Web driver: WebdriverIO native (WebDriver BiDi where available; Safari runs classic WebDriver)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./manifest": {
+      "types": "./dist/manifest.d.ts",
+      "default": "./dist/manifest.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "@kraken-e2e/contracts": "workspace:^"
+  },
+  "devDependencies": {
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/core": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "dependencies": {
+    "webdriverio": "catalog:"
+  },
+  "license": "GPL-3.0-only"
+}
