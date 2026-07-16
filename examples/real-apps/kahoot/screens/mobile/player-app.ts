@@ -16,15 +16,18 @@
 import type { UserSession } from '@kraken-e2e/contracts';
 
 import { a11y, testId, text, ui } from '../../support/locators.js';
-import { waitForAny, waitForValue } from '../../support/waits.js';
+import { waitForAny, waitForEmpty, waitForValue } from '../../support/waits.js';
 
 /** The single PIN/nickname edit field each join screen shows. */
 const EDIT_FIELD = ui('new UiSelector().className("android.widget.EditText")');
 const JOIN = a11y('Join');
 const ENTER = text('Enter');
 const OK_GO = text('OK, go!');
-// The post-answer wrap-up: a "Continue" button on the placement screen, then a
-// second one on the stats screen — same test id on both.
+// Kahoot's nickname input; the same generated id backs the PIN and nickname
+// screens, so it may briefly still hold the PIN.
+const NICKNAME_FIELD = testId('_r_1_');
+// The post-answer wrap-up: a "Continue" button appears on the placement screen
+// and again on the stats screen — the SAME id on both.
 const CONTINUE = testId('continueButton');
 
 export class PlayerApp {
@@ -46,17 +49,18 @@ export class PlayerApp {
     // mid-transition poll could still see the (now stale) PIN edit box.
     await session.waitFor(ENTER, 'hidden', { timeoutMs: 15_000 });
 
-    // The nickname screen. Its field keeps a stable generated test id, but we
-    // fall back to "the lone edit field" so a test-id churn can't strand us.
-    const nicknameField = await waitForAny(session, [testId('_r_1_'), EDIT_FIELD], {
-      timeoutMs: 30_000,
-    });
+    // The nickname screen. Kahoot reuses ONE input component across the PIN and
+    // nickname screens (same generated id), so the field can still hold the PIN
+    // for a beat. Anchor on that field, wait until it is actually EMPTY, then
+    // type — otherwise the nickname is appended to the PIN ("1234567MyName").
+    const nicknameField = NICKNAME_FIELD;
+    await session.waitFor(nicknameField, 'visible', { timeoutMs: 30_000 });
     await session.tap(nicknameField);
+    await waitForEmpty(session, nicknameField, { timeoutMs: 10_000 });
     await session.typeText(nicknameField, nickname);
-    // Confirm the nickname actually landed in the field before submitting — the
-    // app's input handling can lag typeText, and a too-early "OK, go!" tap would
-    // register a half-typed name.
-    await waitForValue(session, nicknameField, nickname, { timeoutMs: 10_000 });
+    // Confirm the field holds EXACTLY the nickname (not the PIN + nickname, and
+    // not a half-typed value) before submitting.
+    await waitForValue(session, nicknameField, nickname, { timeoutMs: 10_000, exact: true });
     await session.waitFor(OK_GO, 'visible', { timeoutMs: 15_000 });
     await session.tap(OK_GO);
 
@@ -95,30 +99,25 @@ export class PlayerApp {
 
   /**
    * Finish the game from the player's side: after the question closes, the app
-   * shows the player's placement, then a stats screen — each with its OWN
-   * "Continue" button that shares the SAME test id. Tap through both.
+   * walks through TWO wrap-up screens — the player's placement, then a stats
+   * summary — each with a "Continue" button that shares the SAME id.
    *
-   * The shared id is a trap: a "did the button go away?" check can't tell
-   * "the tap advanced to the next screen's Continue" from "the tap was swallowed
-   * and the same Continue is still here" (Kahoot's Compose buttons can render a
-   * frame before they're tappable — this suite hits that elsewhere too). So the
-   * two taps could silently collapse onto one screen. The guard against a
-   * false pass is the FINAL assertion: the wrap-up is done only when NO Continue
-   * remains. If one lingers, a tap didn't land — and this fails loudly, with the
-   * screen captured, instead of green-lighting a game that never ended.
+   * That shared id is the trap. Tapping "the Continue" twice in a row races the
+   * screen transition: if the first screen's button is still up when the second
+   * tap fires, the second tap re-hits the FIRST button and the next screen is
+   * never dismissed. So we walk the KNOWN number of screens, and for each one
+   * wait for its button to appear, tap it, then wait for THAT button to
+   * actually leave before moving on. These are WebView screens with variable
+   * render timing, so both waits are generous; a screen that never arrives, or
+   * a tap that never advances, surfaces as a clean timeout rather than a silent
+   * miss.
    */
   async finish(): Promise<void> {
-    // Placement screen → Continue.
-    await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 60_000 });
-    await this.session.tap(CONTINUE);
-    // Let the placement button clear before the next tap so we don't re-tap it;
-    // a cross-fade that keeps a Continue on screen is fine — the next wait
-    // re-finds a visible one.
-    await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 4_000 }).catch(() => {});
-    // Stats screen → Continue again.
-    await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 60_000 });
-    await this.session.tap(CONTINUE);
-    // The player has truly left the game only when no Continue is left.
-    await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 30_000 });
+    const WRAP_UP_SCREENS = 2; // placement, then stats
+    for (let screen = 0; screen < WRAP_UP_SCREENS; screen += 1) {
+      await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 60_000 });
+      await this.session.tap(CONTINUE);
+      await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 20_000 });
+    }
   }
 }

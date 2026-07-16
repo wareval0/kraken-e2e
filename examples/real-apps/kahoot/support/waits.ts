@@ -9,22 +9,24 @@
 import type { TargetLocator, UserSession } from '@kraken-e2e/contracts';
 
 /**
- * Poll a field's value until it contains `expected`. Typing on a native field
+ * Poll a field's value until it matches `expected`. Typing on a native field
  * is not always instant — the app's own input handling can lag a beat behind
  * `typeText`, so submitting immediately can send a half-entered value. This
- * confirms the value landed before the next action.
+ * confirms the value landed before the next action. Pass `exact` to require the
+ * whole (trimmed) value to equal `expected` rather than merely contain it.
  */
 export async function waitForValue(
   session: UserSession,
   target: TargetLocator,
   expected: string,
-  opts: { timeoutMs: number; pollMs?: number },
+  opts: { timeoutMs: number; pollMs?: number; exact?: boolean },
 ): Promise<void> {
   const deadline = Date.now() + opts.timeoutMs;
   const poll = opts.pollMs ?? 300;
+  const want = expected.trim();
   for (;;) {
-    const value = await session.readText(target).catch(() => '');
-    if (value.includes(expected)) return;
+    const value = (await session.readText(target).catch(() => '')).trim();
+    if (opts.exact ? value === want : value.includes(want)) return;
     if (Date.now() >= deadline) {
       throw new Error(
         `Field never held "${expected}" within ${opts.timeoutMs}ms (last: "${value}").`,
@@ -32,6 +34,16 @@ export async function waitForValue(
     }
     await new Promise((resolve) => setTimeout(resolve, poll));
   }
+}
+
+/** Poll until a field is empty — used to confirm a reused input has been
+ *  cleared before typing, so a new value isn't appended to a stale one. */
+export async function waitForEmpty(
+  session: UserSession,
+  target: TargetLocator,
+  opts: { timeoutMs: number; pollMs?: number },
+): Promise<void> {
+  await waitForValue(session, target, '', { ...opts, exact: true });
 }
 
 export async function waitForAny(
