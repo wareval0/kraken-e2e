@@ -13,7 +13,7 @@
  * actions a short grace period, but waiting explicitly reads clearer and gives
  * a precise error when a screen never arrives.
  */
-import type { UserSession } from '@kraken-e2e/contracts';
+import type { TargetLocator, UserSession } from '@kraken-e2e/contracts';
 
 import { a11y, testId, text, ui } from '../../support/locators.js';
 import { waitForAny, waitForEmpty, waitForValue } from '../../support/waits.js';
@@ -99,41 +99,53 @@ export class PlayerApp {
 
   /**
    * Finish the game from the player's side: after the question closes, the app
-   * walks through TWO wrap-up screens — the player's placement, then a stats
-   * summary — each with a "Continue" button that shares the SAME id.
+   * walks through a short sequence of wrap-up screens — the player's placement,
+   * then a stats summary — each with a native "Continue" button that shares the
+   * SAME id, over WebView content.
    *
-   * These are WebView screens, and that is the catch: the native Continue button
-   * can accept a click (Appium reports success) yet do nothing, because the
-   * WebView behind it isn't ready to handle the press yet. A single tap per
-   * screen therefore isn't reliable. For each of the two known screens we wait
-   * for its Continue, then re-tap — re-resolving the element each time — until
-   * that button actually leaves. A press that never lands surfaces as a clean
-   * failure rather than a silently un-finished game.
+   * Two things make this deceptively hard:
+   *  - the shared id means "did THIS screen's Continue go away?" can't be
+   *    answered — the next screen's identical button reads as the same element;
+   *  - the buttons are WebView-backed, so a click can be accepted (Appium
+   *    reports success) yet do nothing until the view behind it is ready.
+   *
+   * So we don't track a specific button. We simply tap whatever Continue is on
+   * screen — a swallowed tap just leaves it there to be tapped again — and stop
+   * once no Continue has been shown for a sustained window. The wrap-up buttons
+   * are native and appear promptly, so the brief gap between two of them is
+   * never mistaken for the end.
    */
   async finish(): Promise<void> {
-    const WRAP_UP_SCREENS = 2; // placement, then stats
-    for (let screen = 0; screen < WRAP_UP_SCREENS; screen += 1) {
-      await this.session.waitFor(CONTINUE, 'visible', { timeoutMs: 60_000 });
-      await this.tapContinueUntilItLeaves();
-    }
-  }
-
-  /** Tap the on-screen Continue until it goes away — a WebView-backed native
-   *  button can swallow a click until it's ready, so one tap isn't enough. The
-   *  per-attempt wait is comfortably longer than a real screen transition, so a
-   *  tap that DID work is never re-fired (which could over-shoot to the next
-   *  screen); only a click that truly didn't land is retried. */
-  private async tapContinueUntilItLeaves(): Promise<void> {
-    for (let attempt = 1; attempt <= 5; attempt += 1) {
-      if (!(await this.session.isDisplayed(CONTINUE))) return; // already advanced
-      await this.session.tap(CONTINUE);
-      try {
-        await this.session.waitFor(CONTINUE, 'hidden', { timeoutMs: 8_000 });
-        return; // the screen advanced
-      } catch {
-        // The button is still here — the click didn't take. Re-resolve and retry.
+    const deadline = Date.now() + 120_000;
+    while (Date.now() < deadline) {
+      if (await this.session.isDisplayed(CONTINUE)) {
+        // Tap the current Continue. If it vanished between the check and the
+        // tap, ignore the miss and re-evaluate on the next pass.
+        await this.session.tap(CONTINUE).catch(() => {});
+        await this.#pollUntilGone(CONTINUE, 3_000); // let the tap land / screen move
+      } else if (await this.#staysGone(CONTINUE, 6_000)) {
+        return; // Continue absent for a sustained window → the game is over
       }
     }
-    throw new Error('The "Continue" button did not respond after 5 taps.');
+    throw new Error('The end-of-game "Continue" screens did not resolve within 120s.');
+  }
+
+  /** Poll until `target` is gone (true) or the budget elapses (false). */
+  async #pollUntilGone(target: TargetLocator, budgetMs: number): Promise<boolean> {
+    const end = Date.now() + budgetMs;
+    while (Date.now() < end) {
+      if (!(await this.session.isDisplayed(target))) return true;
+    }
+    return false;
+  }
+
+  /** True only if `target` stays absent for the whole window; false the moment
+   *  it reappears (a transition gap between two screens must not end the loop). */
+  async #staysGone(target: TargetLocator, windowMs: number): Promise<boolean> {
+    const end = Date.now() + windowMs;
+    while (Date.now() < end) {
+      if (await this.session.isDisplayed(target)) return false;
+    }
+    return true;
   }
 }
