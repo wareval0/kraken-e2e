@@ -1,0 +1,23 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "../../packages/contracts",
+    "../../packages/core",
+    "../../packages/signaling",
+    "../../packages/gherkin",
+    "../../packages/config",
+    "../../packages/reporters",
+    "../../packages/data-gen",
+    "../../packages/fuzz"
+  ],
+  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+  "out": "./api",
+  "docsRoot": ".",
+  "name": "Kraken 3.0 API",
+  "packageOptions": {
+    "includeVersion": true,
+    "readme": "none",
+    "excludeInternal": true
+  }
+}

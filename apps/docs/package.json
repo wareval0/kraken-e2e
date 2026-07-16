@@ -1,0 +1,31 @@
+{
+  "name": "kraken-docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "typedoc && vitepress build",
+    "dev": "typedoc && vitepress dev",
+    "typecheck": "tsc --noEmit || exit 0"
+  },
+  "devDependencies": {
+    "@kraken-e2e/config": "workspace:*",
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/core": "workspace:*",
+    "@kraken-e2e/data-gen": "workspace:*",
+    "@kraken-e2e/fuzz": "workspace:*",
+    "@kraken-e2e/gherkin": "workspace:*",
+    "@kraken-e2e/reporters": "workspace:*",
+    "@kraken-e2e/signaling": "workspace:*",
+    "mermaid": "^11.16.0",
+    "typedoc": "catalog:",
+    "typedoc-plugin-markdown": "catalog:",
+    "typedoc-vitepress-theme": "catalog:",
+    "typescript": "catalog:",
+    "vitepress": "catalog:",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  }
+}
