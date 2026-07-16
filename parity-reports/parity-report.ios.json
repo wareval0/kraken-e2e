@@ -1,0 +1,39 @@
+{
+  "driver": "ios",
+  "generatedAt": "2026-07-05T03:41:27.074Z",
+  "operations": {
+    "tap": {
+      "status": "supported"
+    },
+    "typeText": {
+      "status": "supported"
+    },
+    "readText": {
+      "status": "supported"
+    },
+    "waitFor": {
+      "status": "supported"
+    },
+    "isDisplayed": {
+      "status": "supported"
+    },
+    "scrollIntoView": {
+      "status": "supported"
+    },
+    "pressKey": {
+      "status": "supported"
+    },
+    "navigate": {
+      "status": "supported"
+    },
+    "screenshot": {
+      "status": "supported"
+    },
+    "source": {
+      "status": "supported"
+    },
+    "dispose": {
+      "status": "supported"
+    }
+  }
+}
