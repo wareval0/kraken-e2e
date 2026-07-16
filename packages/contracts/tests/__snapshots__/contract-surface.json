@@ -1,0 +1,58 @@
+{
+  "contractVersion": {
+    "major": 2,
+    "minor": 2
+  },
+  "runtimeExports": [
+    "CONTRACT_VERSION",
+    "CORE_OPERATIONS",
+    "DRIVER_BRAND",
+    "KrakenError",
+    "KrakenErrorCodes",
+    "checkHostRequirements",
+    "defineDriver",
+    "defineReporter",
+    "isContractCompatible",
+    "isKrakenDriver",
+    "serializeError"
+  ],
+  "coreOperations": [
+    "tap",
+    "typeText",
+    "readText",
+    "waitFor",
+    "isDisplayed",
+    "scrollIntoView",
+    "pressKey",
+    "navigate",
+    "screenshot",
+    "source",
+    "dispose"
+  ],
+  "errorCodes": [
+    "KRK-CONFIG-INVALID",
+    "KRK-CONFIG-NOT-FOUND",
+    "KRK-DRIVER-APP-NOT-FOUND",
+    "KRK-DRIVER-START-FAILED",
+    "KRK-DRIVER-UNKNOWN-PLATFORM",
+    "KRK-HOST-UNSUPPORTED",
+    "KRK-PLAN-DEADLOCK",
+    "KRK-PLAN-DUPLICATE-TASK",
+    "KRK-PLAN-TASK-JOIN-TIMEOUT",
+    "KRK-PLAN-UNJOINED-TASK",
+    "KRK-PLAN-UNKNOWN-TASK",
+    "KRK-PLUGIN-INCOMPATIBLE",
+    "KRK-PLUGIN-INVALID",
+    "KRK-PLUGIN-NOT-FOUND",
+    "KRK-RUN-ABORTED",
+    "KRK-SESSION-CREATE-FAILED",
+    "KRK-SESSION-ELEMENT-NOT-FOUND",
+    "KRK-SESSION-OP-UNSUPPORTED",
+    "KRK-SESSION-WAIT-TIMEOUT",
+    "KRK-SIGNAL-TIMEOUT",
+    "KRK-STEP-AMBIGUOUS",
+    "KRK-STEP-FAILED",
+    "KRK-STEP-UNKNOWN-ACTOR",
+    "KRK-STEP-UNMATCHED"
+  ]
+}

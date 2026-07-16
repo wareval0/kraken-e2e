@@ -1,0 +1,35 @@
+{
+  "name": "@kraken-e2e/contracts",
+  "version": "3.0.0",
+  "description": "Zero-runtime-dependency SPI: driver/reporter interfaces, event types, error codes, defineDriver/defineReporter, CONTRACT_VERSION",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@kraken-e2e/signaling": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "license": "GPL-3.0-only"
+}
