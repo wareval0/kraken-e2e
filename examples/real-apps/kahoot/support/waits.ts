@@ -1,0 +1,56 @@
+/**
+ * Small waiting utilities the Screen Objects share.
+ *
+ * `waitForAny` — poll a set of candidate locators until ONE is displayed and
+ * return it. Real products A/B-test their controls and rename hooks between
+ * releases; anchoring a hop on "whichever of these renders" keeps a suite
+ * alive across variants without loosening what it asserts.
+ */
+import type { TargetLocator, UserSession } from '@kraken-e2e/contracts';
+
+/**
+ * Poll a field's value until it contains `expected`. Typing on a native field
+ * is not always instant — the app's own input handling can lag a beat behind
+ * `typeText`, so submitting immediately can send a half-entered value. This
+ * confirms the value landed before the next action.
+ */
+export async function waitForValue(
+  session: UserSession,
+  target: TargetLocator,
+  expected: string,
+  opts: { timeoutMs: number; pollMs?: number },
+): Promise<void> {
+  const deadline = Date.now() + opts.timeoutMs;
+  const poll = opts.pollMs ?? 300;
+  for (;;) {
+    const value = await session.readText(target).catch(() => '');
+    if (value.includes(expected)) return;
+    if (Date.now() >= deadline) {
+      throw new Error(
+        `Field never held "${expected}" within ${opts.timeoutMs}ms (last: "${value}").`,
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, poll));
+  }
+}
+
+export async function waitForAny(
+  session: UserSession,
+  targets: readonly TargetLocator[],
+  opts: { timeoutMs: number; pollMs?: number },
+): Promise<TargetLocator> {
+  const deadline = Date.now() + opts.timeoutMs;
+  const poll = opts.pollMs ?? 500;
+  for (;;) {
+    for (const target of targets) {
+      if (await session.isDisplayed(target)) return target;
+    }
+    if (Date.now() >= deadline) {
+      const described = targets.map((t) => `${t.by}=${t.value}`).join(' | ');
+      throw new Error(
+        `None of the expected elements appeared within ${opts.timeoutMs}ms: ${described}`,
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, poll));
+  }
+}

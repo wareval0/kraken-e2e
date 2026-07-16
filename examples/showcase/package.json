@@ -1,0 +1,29 @@
+{
+  "name": "kraken-example-showcase",
+  "version": "0.0.1",
+  "description": "The Kraken showcase: realistic multi-user/multi-device E2E suites across Android, iOS and Web — Page Objects, seeded data, signal choreography and seeded monkey testing",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kraken-e2e/cli": "workspace:*",
+    "@kraken-e2e/config": "workspace:*",
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/data-gen": "workspace:*",
+    "@kraken-e2e/driver-android": "workspace:*",
+    "@kraken-e2e/driver-ios": "workspace:*",
+    "@kraken-e2e/driver-web": "workspace:*",
+    "@kraken-e2e/fuzz": "workspace:*",
+    "@kraken-e2e/gherkin": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

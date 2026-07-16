@@ -1,0 +1,11 @@
+# Secrets — never commit.
+.env
+.env.host
+.env.local
+
+# Kraken runtime (per-step screenshots, run artifacts, caches).
+.kraken/
+.turbo/
+
+.DS_Store
+node_modules/

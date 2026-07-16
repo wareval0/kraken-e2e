@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Kraken relay station</title></head>
+<body>
+  <main style="display:flex;flex-direction:column;gap:12px;padding:24px;max-width:480px">
+    <h1 aria-label="Relay-screen">Relay station (web)</h1>
+    <!-- Same aria-label ids as the mobile fixture's accessibility ids: ONE
+         portable locator strategy ({ by: 'a11y' }) works on all three platforms. -->
+    <input aria-label="text-input" placeholder="Relay the message…"
+      oninput="document.querySelector('[aria-label=input-text-result]').textContent = this.value">
+    <output aria-label="input-text-result"></output>
+  </main>
+</body>
+</html>

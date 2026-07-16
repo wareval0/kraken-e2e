@@ -1,0 +1,25 @@
+{
+  "name": "kraken-example-mobile-messaging",
+  "version": "0.0.5",
+  "description": "M1 exit demo: a REAL Android emulator and a REAL iOS simulator choreographed by signals in one scenario",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kraken-e2e/cli": "workspace:*",
+    "@kraken-e2e/config": "workspace:*",
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/driver-android": "workspace:*",
+    "@kraken-e2e/driver-ios": "workspace:*",
+    "@kraken-e2e/gherkin": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

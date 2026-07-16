@@ -1,0 +1,27 @@
+{
+  "name": "kraken-example-multi-user-android-ios-web",
+  "version": "0.0.5",
+  "description": "THE FLAGSHIP: one scenario choreographing a REAL Android emulator, a REAL iOS simulator and a REAL browser through the signal bus",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kraken-e2e/cli": "workspace:*",
+    "@kraken-e2e/config": "workspace:*",
+    "@kraken-e2e/contracts": "workspace:*",
+    "@kraken-e2e/driver-android": "workspace:*",
+    "@kraken-e2e/driver-ios": "workspace:*",
+    "@kraken-e2e/driver-web": "workspace:*",
+    "@kraken-e2e/gherkin": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "allure": "3.14.1",
+    "typescript": "catalog:"
+  }
+}
