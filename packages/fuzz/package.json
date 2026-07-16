@@ -1,0 +1,36 @@
+{
+  "name": "@kraken-e2e/fuzz",
+  "version": "3.0.0",
+  "description": "Cross-platform random-event engine driving the core session contract (signal-aware fuzzing)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "@kraken-e2e/contracts": "workspace:*"
+  },
+  "peerDependencies": {
+    "@kraken-e2e/contracts": "workspace:^"
+  },
+  "license": "GPL-3.0-only"
+}
